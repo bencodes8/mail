@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // By default, load the inbox
   load_mailbox('inbox');
 
-  // Submit form as JSON
+  // Send mail
   document.querySelector('form').onsubmit = () => {
     fetch('/emails', {
       method: 'POST',
@@ -46,4 +46,20 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  // Fetch for correct mails
+  fetch(`emails/${mailbox}`)
+  .then(response => response.json())
+  .then(data => {
+    data.forEach(element => {
+      mail = document.createElement('div');
+      mail.id = 'mail';
+      mail.innerHTML = `${element.sender} ${element.subject} ${element.timestamp}`;
+      document.querySelector('#emails-view').append(mail);
+
+      if (element.read === true) {
+        document.querySelector('#mail').style.background = 'lightgray';
+      }
+    })
+  });
 }
