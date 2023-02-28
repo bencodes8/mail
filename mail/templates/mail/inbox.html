@@ -1,6 +1,10 @@
 {% extends "mail/layout.html" %}
 {% load static %}
 
+{% block script %}
+    <script src="{% static 'mail/inbox.js' %}"></script>
+{% endblock %}
+
 {% block body %}
     <h2>{{ request.user.email }}</h2>
 
@@ -30,8 +34,4 @@
             <input type="submit" class="btn btn-primary"/>
         </form>
     </div>
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'mail/inbox.js' %}"></script>
 {% endblock %}
