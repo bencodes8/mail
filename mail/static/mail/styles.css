@@ -1,3 +1,8 @@
-textarea {
-    min-height: 400px;
+textarea #compose-body {
+    min-height: 600px;
+}
+
+#mail {
+    padding: 10px;
+    border: 1px solid black;
 }
