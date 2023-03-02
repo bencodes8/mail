@@ -181,10 +181,15 @@ function reply_mail(id) {
   .then(response => response.json())
   .then(data => {
     document.querySelector('#compose-recipients').value = data.recipients;
-    document.querySelector('#compose-recipients').disabled = true;
     document.querySelector('#compose-subject').value = data.subject;
+    document.querySelector('#compose-recipients').disabled = true;
     document.querySelector('#compose-subject').disabled = true;
-    
+    document.querySelector('#compose-body').value = `On ${data.timestamp} ${data.sender} wrote: ${data.body}`;
   });
+
+  // document.querySelector('input[type="submit"]').onclick = () => {
+  //   console.log('WORKSRKSOIERJOESROEJ')
+  // }
+  
 
 }
