@@ -174,6 +174,17 @@ function unarchive_mail(id) {
 }
 
 function reply_mail(id) {
-  compose_email();
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  fetch(`emails/${id}`)
+  .then(response => response.json())
+  .then(data => {
+    document.querySelector('#compose-recipients').value = data.recipients;
+    document.querySelector('#compose-recipients').disabled = true;
+    document.querySelector('#compose-subject').value = data.subject;
+    document.querySelector('#compose-subject').disabled = true;
+    
+  });
 
 }
