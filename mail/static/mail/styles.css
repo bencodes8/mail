@@ -1,5 +1,5 @@
-textarea #compose-body {
-    min-height: 600px;
+#compose-body {
+    min-height: 50%;
 }
 
 ul {
@@ -12,12 +12,16 @@ ul {
 }
 
 .mail-item {
-    text-align: center;
+    text-align: left;
     padding: 10px;
-    border: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 .mail-item:hover {
-    color: #888888;
     box-shadow: 1px 1px 1px #888888;
+}
+
+#reply {
+    margin-left: 10px;
 }
