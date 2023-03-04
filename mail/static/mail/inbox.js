@@ -24,7 +24,8 @@ function compose_email() {
   document.querySelector('#compose-subject').disalbed = false;
 
   // Send mail as POST
-  document.querySelector('form').addEventListener('submit', async () => {
+  document.querySelector('form').addEventListener('submit', async (event) => {
+    event.preventDefault();
     await fetch('/emails', {
       method: 'POST',
       body: JSON.stringify({
@@ -36,7 +37,7 @@ function compose_email() {
     .then(response => response.json())
     .then(data => console.log(data));
 
-    load_mailbox('inbox');
+    load_mailbox('sent');
   });
 }
 
@@ -164,7 +165,7 @@ async function archive_mail(id) {
   await fetch(`/emails/${id}`, {
     method: 'PUT',
     body: JSON.stringify({
-      archived: true
+      archived: true,
     })
   })
   load_mailbox('archive');
@@ -174,7 +175,7 @@ async function unarchive_mail(id) {
   await fetch(`/emails/${id}`, {
     method: 'PUT',
     body: JSON.stringify({
-      archived: false
+      archived: false,
     })
   })
   load_mailbox('inbox');
@@ -206,8 +207,8 @@ function reply_mail(id) {
   });
 
   // Send the replied email
-  document.querySelector('form').addEventListener('submit', () => {
-    fetch(`/emails`, {
+  document.querySelector('form').addEventListener('submit', async () => {
+    await fetch(`/emails`, {
       method: 'POST',
       body: JSON.stringify({
         recipients: document.querySelector('#compose-recipients').value,
@@ -216,7 +217,7 @@ function reply_mail(id) {
       })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
-    .then(load_mailbox('inbox'));
+    .then(data => console.log(data));
+    load_mailbox('sent');
   });
 }
