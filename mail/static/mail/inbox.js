@@ -188,36 +188,38 @@ function reply_mail(id) {
   document.querySelector('#compose-view').style.display = 'block';
   document.querySelector('input[type="submit"]').value = 'Reply';
 
+  // Disable recipients and subject fields
+  document.querySelector('#compose-recipients').disabled = true;
+  document.querySelector('#compose-subject').disabled = true;
+
   fetch(`/emails/${id}`)
   .then(response => response.json())
   .then(data => {
-    // Disable recipients and subject fields
-    document.querySelector('#compose-recipients').disabled = true;
-    document.querySelector('#compose-subject').disabled = true;
-
+    
     // Pre-populate fields
-    document.querySelector('#compose-recipients').value = data.recipients;
+    document.querySelector('#compose-recipients').value = data.sender;
     if (data.subject.slice(0, 3) === 'Re:') {
       document.querySelector('#compose-subject').value = data.subject;
     } else {
       document.querySelector('#compose-subject').value = `Re: ${data.subject}`;
     }
-    document.querySelector('#compose-body').value = `On ${data.timestamp} ${data.sender} wrote: ${data.body} \r\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\r\n`;
+    document.querySelector('#compose-body').value = `On ${data.timestamp} ${data.sender} wrote: ${data.body}\n`;
+    stampedMessage = document.querySelector('#compose-body').value;
+
   });
 
   // Send the replied email
-  document.querySelector('input[type="submit"]').onclick = () => {
+  document.querySelector('form').addEventListener('submit', () => {
     fetch(`/emails`, {
-        method: 'POST',
-        body: JSON.stringify({
-          recipients: document.querySelector('#compose-recipients').value,
-          subject: document.querySelector('#compose-subject').value,
-          body: document.querySelector('#compose-body').value,
-        })
+      method: 'POST',
+      body: JSON.stringify({
+        recipients: document.querySelector('#compose-recipients').value,
+        subject: document.querySelector('#compose-subject').value,
+        body: `${document.querySelector('#compose-body').value.replace(stampedMessage, '')}`
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-    };
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .then(load_mailbox('inbox'));
+  });
 }
