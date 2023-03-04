@@ -24,9 +24,8 @@ function compose_email() {
   document.querySelector('#compose-subject').disalbed = false;
 
   // Send mail as POST
-  document.querySelector('form').addEventListener('submit', (event) => {
-    event.preventDefault();
-    fetch('/emails', {
+  document.querySelector('form').addEventListener('submit', async () => {
+    await fetch('/emails', {
       method: 'POST',
       body: JSON.stringify({
         recipients: document.querySelector('#compose-recipients').value,
@@ -35,9 +34,9 @@ function compose_email() {
       }),
     })
     .then(response => response.json())
-    .then(setTimeout(() => {
-      load_mailbox('sent')
-    }, '250'));
+    .then(data => console.log(data));
+
+    load_mailbox('inbox');
   });
 }
 
@@ -75,7 +74,6 @@ function load_mailbox(mailbox) {
     });
   });
 }
-
 
 function view_email(id) {
   // Removes inbox divs
@@ -162,28 +160,24 @@ function view_email(id) {
   });
 }
 
-function archive_mail(id) {
-  fetch(`/emails/${id}`, {
+async function archive_mail(id) {
+  await fetch(`/emails/${id}`, {
     method: 'PUT',
     body: JSON.stringify({
       archived: true
     })
   })
-  .then(setTimeout(()=> {
-    load_mailbox('inbox')
-  }, '250'));
+  load_mailbox('archive');
 }
 
-function unarchive_mail(id) {
-  fetch(`/emails/${id}`, {
+async function unarchive_mail(id) {
+  await fetch(`/emails/${id}`, {
     method: 'PUT',
     body: JSON.stringify({
       archived: false
     })
   })
-  .then(setTimeout(() => {
-    load_mailbox('inbox')
-  }, '250'));
+  load_mailbox('inbox');
 }
 
 function reply_mail(id) {
