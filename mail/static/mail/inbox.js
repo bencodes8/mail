@@ -24,7 +24,8 @@ function compose_email() {
   document.querySelector('#compose-subject').disalbed = false;
 
   // Send mail as POST
-  document.querySelector('form').addEventListener('submit', () => {
+  document.querySelector('form').addEventListener('submit', (event) => {
+    event.preventDefault();
     fetch('/emails', {
       method: 'POST',
       body: JSON.stringify({
@@ -34,7 +35,9 @@ function compose_email() {
       }),
     })
     .then(response => response.json())
-    .then(load_mailbox('inbox'));
+    .then(setTimeout(() => {
+      load_mailbox('sent')
+    }, '250'));
   });
 }
 
@@ -195,7 +198,7 @@ function reply_mail(id) {
   fetch(`/emails/${id}`)
   .then(response => response.json())
   .then(data => {
-    
+
     // Pre-populate fields
     document.querySelector('#compose-recipients').value = data.sender;
     if (data.subject.slice(0, 3) === 'Re:') {
