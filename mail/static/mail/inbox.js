@@ -142,17 +142,20 @@ function view_email(id) {
 
       document.querySelector('#emails-view').append(view, btns, row, body);
 
-      document.querySelector('#archive').onclick = () => {
+      // Archiving emails
+      document.querySelector('#archive').addEventListener('click', () => {
         if (data.archived === false) {
           archive_mail(data.id);
         } else {
           unarchive_mail(data.id);
         }
-      };
+      });
 
-      document.querySelector('#reply').onclick = () => {
+      // Reply to email
+      document.querySelector('#reply').addEventListener('click', () => {
         reply_mail(data.id);
-      };
+      });
+
   });
 }
 
